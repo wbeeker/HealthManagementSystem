@@ -8,6 +8,7 @@
 #include "Patient.h"
 #include "PatientRecord.h"
 #include "app.h"
+#include "IntakeForm.h"
 
 
 int main () {
@@ -17,8 +18,18 @@ int main () {
         PatientComparator
     > erQueue;
 
-    auto p1 = std::make_shared<Patient>("Alice", 30, 2, "Arm pain");
-    auto p2 = std::make_shared<Patient>("Bob", 45, 8, "Chest pain");
+    IntakeForm form;
+    char more = 'y';
+    while(more == 'y' || more == 'Y') {
+        auto patient = form.collect();
+        PatientRecord record(patient->getPriority(), std::time(nullptr), patient);
+        erQueue.push(record);
+
+        std::cout << "Add another patient? (y/n): ";
+        std::cin >> more;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
 
     while (!erQueue.empty()) {
         auto next = erQueue.top();

@@ -15,6 +15,10 @@ int Patient::getPriority() const {
     return priorityLevel;
 }
 
+std::string Patient::getReason() const {
+    return reason;
+}
+
 void Patient::displayInfo() const {
     std::cout << "Patient: " << name
               << ", Age: " << age

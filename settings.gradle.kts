@@ -6,4 +6,4 @@
  */
 
 rootProject.name = "HealthManagementSystem"
-include("app")
+include(":app")

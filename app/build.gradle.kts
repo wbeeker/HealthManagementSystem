@@ -7,7 +7,7 @@
 
 plugins {
     // Apply the cpp-application plugin to add support for building C++ executables
-    `cpp-application`
+    id("cpp-application")
 
     // Apply the cpp-unit-test plugin to add support for building and running C++ test executables
     `cpp-unit-test`
@@ -16,4 +16,6 @@ plugins {
 // Set the target operating system and architecture for this application
 application {
     targetMachines.add(machines.macOS.x86_64)
+    source.from(file("src/main/cpp"))
+    privateHeaders.from(file("src/main/headers"))
 }
