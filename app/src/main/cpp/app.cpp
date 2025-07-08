@@ -22,7 +22,7 @@ int main () {
     char more = 'y';
     while(more == 'y' || more == 'Y') {
         auto patient = form.collect();
-        PatientRecord record(patient->getPriority(), std::time(nullptr), patient);
+        PatientRecord record(std::time(nullptr), patient);
         erQueue.push(record);
 
         std::cout << "Add another patient? (y/n): ";
