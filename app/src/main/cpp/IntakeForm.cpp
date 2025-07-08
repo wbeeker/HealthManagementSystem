@@ -10,16 +10,18 @@ std::shared_ptr<Patient> IntakeForm::collect() {
 
     std::cout << "\n---- Patient Intake Form ----" <<std::endl;
     std::cout << "Name: ";
-    std::cin >> name;
+    std::getline(std::cin, name);
 
     std::cout << "Age: ";
-    std::cin >> age;
+    std::cin >> age;    
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cout << "Priority Level on a scale of 1 to 10: ";
+    std::cout << "Priority Level on a scale of 1 to 10 (10 is severe, 1 is mild): ";
     std::cin >> priority;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     std::cout << "Reason for visit: ";
-    std::cin >> reason;
+    std::getline(std::cin, reason);
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 

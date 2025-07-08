@@ -11,6 +11,16 @@
 #include "app.h"
 #include "IntakeForm.h"
 
+void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> q) {
+    std::cout << "\n📋 Current Queue (Highest Priority First):\n";
+    while (!q.empty()) {
+        auto p = q.top().patient;
+        p->displayInfo();
+        q.pop();
+    }
+    std::cout << "------------------------------\n";
+}
+
 
 int main () {
     std::priority_queue<
@@ -26,6 +36,8 @@ int main () {
         PatientRecord record(std::time(nullptr), patient);
         erQueue.push(record);
 
+        displayQueue(erQueue);
+
         std::string line;
         std::cout << "Add another patient? (y/n): ";
         std::getline(std::cin, line);
@@ -39,12 +51,6 @@ int main () {
         if (more != 'y' && more != 'Y') {
             break;
         }
-    }
-
-    while (!erQueue.empty()) {
-        auto next = erQueue.top();
-        next.patient->displayInfo();
-        erQueue.pop();
     }
 
     return 0;

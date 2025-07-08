@@ -19,7 +19,7 @@ struct PatientComparator{
         int rhspriority = rhs.patient->getPriority();
 
         if (lhspriority != rhspriority) 
-            return lhspriority > rhspriority;
+            return lhspriority < rhspriority;
         
         return lhs.arrivalTime > rhs.arrivalTime;
     }
