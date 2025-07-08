@@ -5,6 +5,7 @@
 #include <queue>
 #include <memory>
 #include <ctime>
+#include <limits>
 #include "Patient.h"
 #include "PatientRecord.h"
 #include "app.h"
@@ -20,23 +21,31 @@ int main () {
 
     IntakeForm form;
     char more = 'y';
-    while(more == 'y' || more == 'Y') {
+    while(true) {
         auto patient = form.collect();
         PatientRecord record(std::time(nullptr), patient);
         erQueue.push(record);
 
+        std::string line;
         std::cout << "Add another patient? (y/n): ";
-        std::cin >> more;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
+        std::getline(std::cin, line);
 
+        if (!line.empty()) {
+            more = line[0];
+        } else {
+            more = 'n';
+        }
+
+        if (more != 'y' && more != 'Y') {
+            break;
+        }
+    }
 
     while (!erQueue.empty()) {
         auto next = erQueue.top();
         next.patient->displayInfo();
         erQueue.pop();
     }
-
 
     return 0;
 }
