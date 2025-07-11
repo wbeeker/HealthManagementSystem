@@ -1,5 +1,6 @@
 # Emergency Room Priority Queue
 
+Starting the program prompts the user to fill in a Patient Intake Form, including the patient's name, age, level of pain, and the reason for their visit:
 <img width="692" height="143" alt="Image" src="https://github.com/user-attachments/assets/1ac76b5f-eeff-4263-a135-b2e7d7b36749" />
 
 <img width="673" height="246" alt="Image" src="https://github.com/user-attachments/assets/a1054000-648f-453d-9426-9132dacd488b" />
