@@ -21,6 +21,20 @@ void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>,
     std::cout << "------------------------------\n";
 }
 
+void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> queue, const std::shared_ptr<IPatient> target) {
+    std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> newQueue;
+
+    while (!queue.empty()) {
+        PatientRecord record = queue.top();
+        queue.pop();
+
+        if (record.patient != target) {
+            newQueue.push(record);
+        }
+    }
+    queue = std::move(newQueue);
+}
+
 
 int main () {
     std::priority_queue<
@@ -29,14 +43,56 @@ int main () {
         PatientComparator
     > erQueue;
 
+    struct Bed {
+        bool available = true;
+        std::shared_ptr<IPatient> patient = nullptr;
+    }; 
+
+    std::array<Bed, 30> bedsAvailable;
+
     IntakeForm form;
+    std::string action;
+    int openBed = 0;
+
+
     char more = 'y';
     while(true) {
-        auto patient = form.collect();
-        PatientRecord record(std::time(nullptr), patient);
-        erQueue.push(record);
+        std::cout << "What would you like to do?\nTo add patient type 'add'\nTo remove patient from queue type 'remove\nTo discharge patient type 'discharge.'" << std::endl;
+        std::getline(std::cin, action);
 
-        displayQueue(erQueue);
+        if (action == "add") {
+            auto patient = form.collect();
+            PatientRecord record(std::time(nullptr), patient);
+
+            if (openBed < 30) {
+                bedsAvailable[openBed].available = false;
+                bedsAvailable[openBed].patient = patient;
+                openBed++;
+            } else {
+                erQueue.push(record);
+                displayQueue(erQueue);
+            }
+        } else if (action == "remove") {
+            std::string target;
+            std::cout << "Which patient would you like to remove? Enter name: ";
+            std::getline(std::cin, target);
+
+            for (int i = 0; i < erQueue.size() - 1; i++) {
+                // Iterate through erQueue to find patient to be removed
+            }
+
+
+            removePatient(erQueue, target);
+        } else if (action == "discharge") {
+
+        } else {
+            std::cout << "Please enter a valid option.\n" << std::endl;
+        }
+
+
+
+
+
 
         std::string line;
         std::cout << "Add another patient? (y/n): ";
