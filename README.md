@@ -8,9 +8,12 @@ Completing the Patient Intake Form creates a Patient Record with the patient's a
 
 <img width="673" height="246" alt="Image" src="https://github.com/user-attachments/assets/a1054000-648f-453d-9426-9132dacd488b" />
 
+
 Here we see that the queue keeps the highest priority level in the to position and arranges the queue in descending order:
 
 <img width="664" height="223" alt="Image" src="https://github.com/user-attachments/assets/baf9f939-60f4-4e9c-a5d9-0b332acf81c3" />
+
+When two patients in the queue have the same priority level, they're ordered based on arrival time. Whoever's been waiting longer takes the higher position:
 
 <img width="661" height="242" alt="Image" src="https://github.com/user-attachments/assets/9349edb3-d530-43ce-8b58-a466228d2e04" />
 
