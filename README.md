@@ -17,4 +17,6 @@ When two patients in the queue have the same priority level, they're ordered bas
 
 <img width="661" height="242" alt="Image" src="https://github.com/user-attachments/assets/9349edb3-d530-43ce-8b58-a466228d2e04" />
 
+Priority level trumps arrival time, so if a new patient has a higher priority level than anyone else in the queue, they'll take the top position:
+
 <img width="661" height="262" alt="Image" src="https://github.com/user-attachments/assets/914ca8b5-1e2b-45bc-a7f8-6651abd71e81" />
