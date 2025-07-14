@@ -11,6 +11,12 @@
 #include "PatientRecord.h"
 #include "app.h"
 #include "IntakeForm.h"
+#include "DischargeForm.h"
+
+struct Bed {
+    bool available = true;
+    std::shared_ptr<IPatient> patient = nullptr;
+}; 
 
 void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> q) {
     std::cout << "\n📋 Current Queue (Highest Priority First):\n";
@@ -53,6 +59,21 @@ void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>
     queue = std::move(newQueue);
 }
 
+std::shared_ptr<IPatient> getPatientToDischarge(std::array<Bed, 30>& bedsAvailable, std::string patientName) {
+
+    for (Bed& bed : bedsAvailable) {
+        if (bed.patient && toLower(bed.patient->getName()) == toLower(patientName)) {
+            auto patient = bed.patient;
+            bed.patient = nullptr;
+            bed.available = false;
+            return patient;
+        }
+    }
+    
+    std::cout << "\nPatient not found.\n";
+    return nullptr;
+}
+
 
 int main () {
     std::priority_queue<
@@ -61,10 +82,7 @@ int main () {
         PatientComparator
     > erQueue;
 
-    struct Bed {
-        bool available = true;
-        std::shared_ptr<IPatient> patient = nullptr;
-    }; 
+
 
     std::array<Bed, 30> bedsAvailable;
 
@@ -96,6 +114,13 @@ int main () {
             std::getline(std::cin, target);
             removePatient(erQueue, target);
         } else if (action == "discharge") {
+            std::string patientToDischarge;
+            std::cout << "Which patient do you want to discharge? Enter name: \n";
+            std::getline(std::cin, patientToDischarge);
+            std::shared_ptr<IPatient> dischargedPatient = (getPatientToDischarge(bedsAvailable, patientToDischarge));
+
+            DischargeForm form;
+            // form.dischargePatient(dischargedPatient);
 
         } else {
             std::cout << "Please enter a valid option.\n" << std::endl;
