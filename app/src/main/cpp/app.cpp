@@ -6,6 +6,7 @@
 #include <memory>
 #include <ctime>
 #include <limits>
+#include <algorithm>
 #include "Patient.h"
 #include "PatientRecord.h"
 #include "app.h"
@@ -21,17 +22,34 @@ void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>,
     std::cout << "------------------------------\n";
 }
 
-void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> queue, const std::shared_ptr<IPatient> target) {
+std::string toLower(const std::string& str) {
+    std::string result = str;
+    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;  
+}
+
+void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> queue, const std::string& target) {
     std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> newQueue;
+    bool found = false;
+
 
     while (!queue.empty()) {
         PatientRecord record = queue.top();
         queue.pop();
 
-        if (record.patient != target) {
-            newQueue.push(record);
+        if (toLower(record.patient->getName()) == toLower(target)) {
+            found = true;
+            std::cout << "Removed Patient: " << target << "\n";
+            continue;
         }
+
+        newQueue.push(record);
     }
+    
+    if (!found) {
+        std::cout << "Patient not found in queue.\n";
+    }
+
     queue = std::move(newQueue);
 }
 
@@ -76,12 +94,6 @@ int main () {
             std::string target;
             std::cout << "Which patient would you like to remove? Enter name: ";
             std::getline(std::cin, target);
-
-            for (int i = 0; i < erQueue.size() - 1; i++) {
-                // Iterate through erQueue to find patient to be removed
-            }
-
-
             removePatient(erQueue, target);
         } else if (action == "discharge") {
 
