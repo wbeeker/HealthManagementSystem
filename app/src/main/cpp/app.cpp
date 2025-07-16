@@ -15,7 +15,7 @@
 
 struct Bed {
     bool available = true;
-    std::shared_ptr<IPatient> patient = nullptr;
+    std::shared_ptr<PatientRecord> patientRecord = nullptr;
 }; 
 
 void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> q) {
@@ -59,14 +59,14 @@ void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>
     queue = std::move(newQueue);
 }
 
-std::shared_ptr<IPatient> getPatientToDischarge(std::array<Bed, 30>& bedsAvailable, std::string patientName) {
+std::shared_ptr<PatientRecord> getPatientToDischarge(std::array<Bed, 30>& bedsAvailable, std::string patientName) {
 
     for (Bed& bed : bedsAvailable) {
-        if (bed.patient && toLower(bed.patient->getName()) == toLower(patientName)) {
-            auto patient = bed.patient;
-            bed.patient = nullptr;
+        if (bed.patientRecord && toLower(bed.patientRecord->patient->getName()) == toLower(patientName)) {
+            auto patient = bed.patientRecord->patient;
+            bed.patientRecord = nullptr;
             bed.available = false;
-            return patient;
+            return std::make_shared<PatientRecord>(bed.patientRecord);
         }
     }
     
@@ -102,7 +102,7 @@ int main () {
 
             if (openBed < 30) {
                 bedsAvailable[openBed].available = false;
-                bedsAvailable[openBed].patient = patient;
+                bedsAvailable[openBed].patientRecord = std::make_shared<PatientRecord>(record);
                 openBed++;
             } else {
                 erQueue.push(record);
@@ -117,7 +117,7 @@ int main () {
             std::string patientToDischarge;
             std::cout << "Which patient do you want to discharge? Enter name: \n";
             std::getline(std::cin, patientToDischarge);
-            std::shared_ptr<IPatient> dischargedPatient = (getPatientToDischarge(bedsAvailable, patientToDischarge));
+            std::shared_ptr<PatientRecord> dischargedPatient = (getPatientToDischarge(bedsAvailable, patientToDischarge));
 
             DischargeForm form;
             // form.dischargePatient(dischargedPatient);
