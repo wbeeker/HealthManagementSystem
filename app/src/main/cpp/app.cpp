@@ -63,10 +63,10 @@ std::shared_ptr<PatientRecord> getPatientToDischarge(std::array<Bed, 30>& bedsAv
 
     for (Bed& bed : bedsAvailable) {
         if (bed.patientRecord && toLower(bed.patientRecord->patient->getName()) == toLower(patientName)) {
-            auto patient = bed.patientRecord->patient;
+            auto patientRecord = bed.patientRecord;
             bed.patientRecord = nullptr;
             bed.available = false;
-            return std::make_shared<PatientRecord>(bed.patientRecord);
+            return patientRecord;
         }
     }
     
@@ -119,8 +119,12 @@ int main () {
             std::getline(std::cin, patientToDischarge);
             std::shared_ptr<PatientRecord> dischargedPatient = (getPatientToDischarge(bedsAvailable, patientToDischarge));
 
-            DischargeForm form;
-            // form.dischargePatient(dischargedPatient);
+            if (dischargedPatient) {
+                 DischargeForm form;
+                form.dischargePatient(*dischargedPatient);
+            } else {
+                std::cout << "Discharge failed: Patient not found.\n";
+            }
 
         } else {
             std::cout << "Please enter a valid option.\n" << std::endl;
