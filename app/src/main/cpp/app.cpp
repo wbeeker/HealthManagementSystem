@@ -91,7 +91,6 @@ int main () {
     int openBed = 0;
 
 
-    char more = 'y';
     while(true) {
         std::cout << "What would you like to do?\nTo add patient type 'add'\nTo remove patient from queue type 'remove\nTo discharge patient type 'discharge.'" << std::endl;
         std::getline(std::cin, action);
@@ -130,22 +129,12 @@ int main () {
             std::cout << "Please enter a valid option.\n" << std::endl;
         }
 
-
-
-
-
-
         std::string line;
-        std::cout << "Add another patient? (y/n): ";
+        std::cout << "Would you like to perform another (y/n): ";
         std::getline(std::cin, line);
 
-        if (!line.empty()) {
-            more = line[0];
-        } else {
-            more = 'n';
-        }
-
-        if (more != 'y' && more != 'Y') {
+        if ((line[0]) == 'n' || line[0] == 'N') {
+            std::cout << "Thanks for using Health Management System. Bye!\n" << std::endl;
             break;
         }
     }
