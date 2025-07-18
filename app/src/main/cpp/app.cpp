@@ -134,10 +134,11 @@ int main () {
             auto patient = form.collect();
             PatientRecord record(std::time(nullptr), patient);
 
-            if (openBed < 30) {
-                bedsAvailable[openBed].available = false;
-                bedsAvailable[openBed].patientRecord = std::make_shared<PatientRecord>(record);
-                openBed++;
+            if (!bedsQueue.empty()) {
+                int index = bedsQueue.top();
+                bedsQueue.pop();
+                bedsAvailable[index].available = false;
+                bedsAvailable[index].patientRecord = std::make_shared<PatientRecord>(record);
             } else {
                 erQueue.push(record);
                 displayQueue(erQueue);
