@@ -17,7 +17,30 @@
 struct Bed {
     bool available = true;
     std::shared_ptr<PatientRecord> patientRecord = nullptr;
+    std::time_t dischargeTime = 0;
 }; 
+
+struct BedIndexComparator {
+    const std::array<Bed, 30> beds;
+
+    BedIndexComparator(const std::array<Bed, 30>& ref) : beds(ref) {}
+
+    bool operator()(int i, int j) const {
+        return beds[i].dischargeTime > beds[j].dischargeTime;
+    }
+};
+
+// Main list of available beds.
+std::array<Bed, 30> bedsAvailable;
+
+BedIndexComparator comp(bedsAvailable);
+
+// Creates queue of available beds ordered by longest time empty. 
+std::priority_queue<
+    int,
+    std::vector<int>,
+    BedIndexComparator
+> bedsQueue(comp);
 
 // Prints the current waiting queue in the console.
 void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> q) {
@@ -66,11 +89,14 @@ void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>
 // Fetches the patient to discharge from the list of Beds. Changes his bed to available. 
 std::shared_ptr<PatientRecord> getPatientToDischarge(std::array<Bed, 30>& bedsAvailable, std::string patientName) {
 
-    for (Bed& bed : bedsAvailable) {
+    for (int i = 0; i < bedsAvailable.size(); ++i) {
+        Bed& bed = bedsAvailable[i];
         if (bed.patientRecord && toLower(bed.patientRecord->patient->getName()) == toLower(patientName)) {
             auto patientRecord = bed.patientRecord;
             bed.patientRecord = nullptr;
             bed.available = false;
+            bed.dischargeTime = std::time(nullptr);
+            bedsQueue.push(i);
             return patientRecord;
         }
     }
@@ -81,6 +107,14 @@ std::shared_ptr<PatientRecord> getPatientToDischarge(std::array<Bed, 30>& bedsAv
 
 
 int main () {
+
+    // Initializes bed list and empty beds queue.
+    std::time_t now = std::time(nullptr);
+    for (int i = 0; i < bedsAvailable.size(); ++i) {
+        bedsAvailable[i].dischargeTime = now;
+        bedsQueue.push(i);
+    }
+
     // Creates waiting queue. 
     std::priority_queue<
         PatientRecord,
@@ -88,13 +122,8 @@ int main () {
         PatientComparator
     > erQueue;
 
-
-    // Main list of available beds.
-    std::array<Bed, 30> bedsAvailable;
-
     IntakeForm form;
     std::string action;
-    int openBed = 0;
 
     // Main loop to prompt user to perform an action. 
     while(true) {
@@ -125,7 +154,7 @@ int main () {
             std::shared_ptr<PatientRecord> dischargedPatient = (getPatientToDischarge(bedsAvailable, patientToDischarge));
 
             if (dischargedPatient) {
-                 DischargeForm form;
+                DischargeForm form;
                 form.dischargePatient(*dischargedPatient);
             } else {
                 std::cout << "Discharge failed: Patient not found.\n";
@@ -136,7 +165,7 @@ int main () {
         }
 
         std::string line;
-        std::cout << "Would you like to perform another (y/n): ";
+        std::cout << "Would you like to perform another action? (y/n): ";
         std::getline(std::cin, line);
 
         if ((line[0]) == 'n' || line[0] == 'N') {
