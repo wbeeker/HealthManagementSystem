@@ -1,3 +1,5 @@
+// Patient class. Creates a patient object.
+
 #include "Patient.h"
 
 Patient::Patient(const std::string& name, int age, int priority, const std::string& reason)

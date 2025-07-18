@@ -13,11 +13,13 @@
 #include "IntakeForm.h"
 #include "DischargeForm.h"
 
+// Creates an emergency room Bed object to track availability and which patient is currently in the bed if occupied.
 struct Bed {
     bool available = true;
     std::shared_ptr<PatientRecord> patientRecord = nullptr;
 }; 
 
+// Prints the current waiting queue in the console.
 void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> q) {
     std::cout << "\n📋 Current Queue (Highest Priority First):\n";
     while (!q.empty()) {
@@ -28,12 +30,14 @@ void displayQueue(std::priority_queue<PatientRecord, std::vector<PatientRecord>,
     std::cout << "------------------------------\n";
 }
 
+//A helper function to turn strings to lowercase.
 std::string toLower(const std::string& str) {
     std::string result = str;
     std::transform(result.begin(), result.end(), result.begin(), ::tolower);
     return result;  
 }
 
+// Removes a patient from the waiting queue by rebuilding the queue without the selected patient. (Note: removals should be rare.)
 void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> queue, const std::string& target) {
     std::priority_queue<PatientRecord, std::vector<PatientRecord>, PatientComparator> newQueue;
     bool found = false;
@@ -59,6 +63,7 @@ void removePatient(std::priority_queue<PatientRecord, std::vector<PatientRecord>
     queue = std::move(newQueue);
 }
 
+// Fetches the patient to discharge from the list of Beds. Changes his bed to available. 
 std::shared_ptr<PatientRecord> getPatientToDischarge(std::array<Bed, 30>& bedsAvailable, std::string patientName) {
 
     for (Bed& bed : bedsAvailable) {
@@ -76,6 +81,7 @@ std::shared_ptr<PatientRecord> getPatientToDischarge(std::array<Bed, 30>& bedsAv
 
 
 int main () {
+    // Creates waiting queue. 
     std::priority_queue<
         PatientRecord,
         std::vector<PatientRecord>,
@@ -83,14 +89,14 @@ int main () {
     > erQueue;
 
 
-
+    // Main list of available beds.
     std::array<Bed, 30> bedsAvailable;
 
     IntakeForm form;
     std::string action;
     int openBed = 0;
 
-
+    // Main loop to prompt user to perform an action. 
     while(true) {
         std::cout << "What would you like to do?\nTo add patient type 'add'\nTo remove patient from queue type 'remove\nTo discharge patient type 'discharge.'" << std::endl;
         std::getline(std::cin, action);

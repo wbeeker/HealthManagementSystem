@@ -1,3 +1,5 @@
+// Creates, prints, and writes out a discharge form for a discharged patient. 
+
 #include "DischargeForm.h"
 #include <iostream>
 #include <fstream>

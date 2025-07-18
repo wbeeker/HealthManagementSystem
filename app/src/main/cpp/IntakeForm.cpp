@@ -1,7 +1,10 @@
+// Intake form for new patient coming into the emergency room.
+
 #include "IntakeForm.h"
 #include <iostream>
 #include <limits>
 
+// Collects patient information, returns a pointer to a patient object. 
 std::shared_ptr<Patient> IntakeForm::collect() {
     std::string name;
     int age;
