@@ -2,8 +2,10 @@
 
 This project is a console-based Health Management System built in modern C++ using object-oriented design. It simulates patient intake and triage in an emergency room, allowing users to enter patient details through an interactive form. Patients are prioritized using a priority queue, where higher numeric values indicate more critical conditions. The system displays the current queue after each intake and processes patients in order of urgency and arrival time. The project is organized with separate headers and source files, and built using Gradle's C++ toolchain for a clean, modular workflow.
 
+Starting the program prompts the user with several options: add, remove, or discharge a patient:
+<img width="465" height="117" alt="Image" src="https://github.com/user-attachments/assets/fc8daebc-72c9-4dc9-badd-cebd7fe96d90" />
 
-Starting the program prompts the user to fill in a Patient Intake Form, including the patient's name, age, level of pain, and the reason for their visit:
+Selecting 'add' prompts the user to fill in a Patient Intake Form, including the patient's name, age, level of pain, and the reason for their visit:
 
 <img width="692" height="143" alt="Image" src="https://github.com/user-attachments/assets/1ac76b5f-eeff-4263-a135-b2e7d7b36749" />
 
